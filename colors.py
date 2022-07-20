@@ -13,7 +13,11 @@ tasklist_dic.update({'tl_admin':["MobaXterm.exe", "bash.exe", "git-bash.exe", "m
 
 tasklist_dic.update({'tl_infra':["LDsensors.exe", "LDpfcntrs.exe", "LDmemory.exe", "SoftMon.exe", "pds.exe", "PolicySync.exe"]})
 
-tasklist_dic.update({'tl_knownsystemps':["svchost.exe", "System", "reg.exe", "Registry", "wininit.exe", "lsass.exe", "csrss.exe", "conhost.exe", "smss.exe", "winlogon.exe", "services.exe", "fontdrvhost.exe", "dwm.exe", "vmacthlp.exe", "spoolsv.exe", "SecurityHealthService.exe", "VGAuthService.exe", "vmtoolsd.exe", "WmiPrvSE.exe", "TPAutoConnSvc.exe", "dllhost.exe", "msdtc.exe", "SearchIndexer.exe", "sedsvc.exe", "SgrmBroker.exe", "MsMpEng.exe", "NisSrv.exe", "LogonUI.exe", "WUDFHost.exe", "audiodg.exe", "sppsvc.exe", "SearchProtocolHost.exe", "SearchFilterHost.exe", "wermgr.exe", "GoogleUpdate.exe", "SppExtComObj.exe", "sihost.exe", "taskhostw.exe", "ctfmon.exe", "RuntimeBroker.exe", "cmd.exe", "explorer.exe", "ShellExperienceHost.exe", "SearchUI.exe", "SkypeApp.exe", "ApplicationFrameHost.exe", "SkypeBackgroundHost.exe", "browser_broker.exe", "MicrosoftEdge.exe", "MicrosoftEdgeCP.exe", "LockApp.exe", "TPAutoConnect.exe", "MSASCuiL.exe", "OneDrive.exe", "cscript.exe", "Microsoft.Photos.exe", "HxTsr.exe", "backgroundTaskHost.exe", "chrome.exe"]})
+tasklist_dic.update({'tl_knownsystemps':["svchost.exe", "System", "reg.exe", "Registry", "wininit.exe", "lsass.exe", "csrss.exe", "conhost.exe", "smss.exe", "winlogon.exe", "services.exe", "fontdrvhost.exe", "dwm.exe", "vmacthlp.exe", "spoolsv.exe", "SecurityHealthService.exe", "VGAuthService.exe", "vmtoolsd.exe", "WmiPrvSE.exe", "TPAutoConnSvc.exe", "dllhost.exe", "msdtc.exe", "SearchIndexer.exe", "sedsvc.exe", "SgrmBroker.exe", "MsMpEng.exe", "NisSrv.exe", "LogonUI.exe", "WUDFHost.exe", "audiodg.exe", "sppsvc.exe", "SearchProtocolHost.exe", "SearchFilterHost.exe", "wermgr.exe", "GoogleUpdate.exe", "SppExtComObj.exe", "sihost.exe", "taskhostw.exe", "ctfmon.exe", "RuntimeBroker.exe", "cmd.exe", "explorer.exe", "ShellExperienceHost.exe", "SearchUI.exe", "SkypeApp.exe", "ApplicationFrameHost.exe", "SkypeBackgroundHost.exe", "browser_broker.exe", "MicrosoftEdge.exe", "MicrosoftEdgeCP.exe", "LockApp.exe", "TPAutoConnect.exe", "MSASCuiL.exe", "OneDrive.exe", "cscript.exe", "Microsoft.Photos.exe", "HxTsr.exe", "backgroundTaskHost.exe"]})
+
+tasklist_dic.update({'tl_browsers':["chrome.exe", "firefox.exe", "iexplore.exe", "MicrosoftEdgeCP.exe", "opera.exe"]})
+
+tasklist_dic.update({'tl_exp_win':["explorer.exe", "winlogon.exe"]})
 
 tasklist_values = list(tasklist_dic.values())
 tasklist_keys = list(tasklist_dic.keys())
@@ -22,7 +26,20 @@ import re
 from colorama import Fore, Back, Style, init
 
 def Colors(data,output):
+
+    if not isinstance(output, str):
+        output = output.decode("utf-8")
+
     if 'tasklist' in data:
+        print()
+        print("[*] AV : " + Fore.RED + "RED" + Style.RESET_ALL)
+        print("[*] ADMIN : " + Fore.CYAN + "CYAN" + Style.RESET_ALL)
+        print("[*] INFRA : " + Fore.BLUE + "BLUE" + Style.RESET_ALL)
+        print("[*] UNKNOWN : " + Fore.MAGENTA + "MAGENTA" + Style.RESET_ALL)
+        print("[*] BROWSER : " + Fore.GREEN + "GREEN" + Style.RESET_ALL)
+        print("[*] KNOWNSYSTEMPS : " + Fore.WHITE + "WHITE" + Style.RESET_ALL)
+        print("[*] EXPLORER/WINLOGON : " + Fore.BLUE + "BLUE" + Style.RESET_ALL)
+
         init(autoreset=True)
         output = output.split('\n')
         color_output = ""
@@ -31,19 +48,27 @@ def Colors(data,output):
                 process = re.findall("(.*\.exe?)",line)
                 process = process[0]
             except:
-                pass
+                process = line.split(' ')[0]
 
             if process in tasklist_dic.get('tl_av'):
                 line = Fore.RED + line
             elif process in tasklist_dic.get('tl_admin'):                       
                 line = Fore.CYAN + line
             elif process in tasklist_dic.get('tl_infra'): 
-                line = Fore.MAGENTA + line
+                line = Fore.BLUE + line
             elif process in tasklist_dic.get('tl_knownsystemps'): 
+                line = Fore.WHITE + line
+            elif process in tasklist_dic.get('tl_browsers'): 
                 line = Fore.GREEN + line
-                print(process)
+            elif process in tasklist_dic.get('tl_exp_win'): 
+                line = Fore.BLUE + line
             else:
-                pass
+                if line == output[1]:
+                    pass
+                elif line == output[2]:
+                    pass
+                else:
+                    line = Fore.MAGENTA + line
 
             color_output += line + Style.RESET_ALL + "\n"
         
