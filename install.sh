@@ -13,3 +13,6 @@ sed 's/print(self.__outputBuffer)/colors.Colors(data,self.__outputBuffer)/g' /us
 echo "[+] ATEXEC : /usr/share/doc/python3-impacket/examples/atexec.py"
 sed '27 i from impacket.examples import colors' /usr/share/doc/python3-impacket/examples/atexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/atexec.py; rm -f /tmp/.i
 sed 's/print(data.decode(CODEC))/colors.Colors(self.__command,data)/g' /usr/share/doc/python3-impacket/examples/atexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/atexec.py; rm -f /tmp/.i
+echo "[+] SMBEXEC : /usr/share/doc/python3-impacket/examples/smbexec.py"
+sed '44 i from impacket.examples import colors' /usr/share/doc/python3-impacket/examples/smbexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/smbexec.py; rm -f /tmp/.i
+sed 's/print(self.__outputBuffer.decode(CODEC))/colors.Colors(data,self.__outputBuffer)/g' /usr/share/doc/python3-impacket/examples/smbexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/smbexec.py; rm -f /tmp/.i

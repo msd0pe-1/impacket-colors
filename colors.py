@@ -70,7 +70,9 @@ def Colors(data,output):
                 else:
                     line = Fore.MAGENTA + line
 
-            color_output += line + Style.RESET_ALL + "\n"
+            color_output += line + Style.RESET_ALL
+            if output[len(output) - 2] not in line:
+                color_output += "\n"
         
         print(color_output)
 
