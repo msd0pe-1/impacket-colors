@@ -133,7 +133,8 @@ def Colors(data,output):
                         file_bytes = file_bytes[0]
                         file_name = file_name[0].strip('\r')
                         if int(file_bytes.replace(',','')) <= 2000000:
-                            line =  re.sub("\s\d+,?\d*\s", Fore.GREEN + " " + file_bytes + " " + Style.RESET_ALL, line)
+                            line = re.sub("\s\d+\s", Fore.GREEN + " " + file_bytes + " " + Style.RESET_ALL, line)
+                            line =  re.sub("\s\d+,?\d*,?\d+,?\d+\s", Fore.GREEN + " " + file_bytes + " " + Style.RESET_ALL, line)
                         elif int(file_bytes.replace(',','')) <= 10000000:
                             line = line.replace(file_bytes, Fore.YELLOW + file_bytes + Style.RESET_ALL) 
                         else:

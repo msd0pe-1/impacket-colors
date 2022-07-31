@@ -22,7 +22,7 @@ It can use the NSRL database of Nist to know if the files encountered are native
 
 <h2>DIR</h2>
 <p align="center">
-  <img width="50% height="50%" src="https://user-images.githubusercontent.com/47142249/182033344-d4ec7911-24ea-4368-8034-38fc97d73ee7.png">
+  <img width="50% height="50%" src="https://user-images.githubusercontent.com/47142249/182034545-b4ca55f1-4d3a-436c-b3ba-46578d589b21.png">
 </p>
 
 <h2>TASKLIST</h2>
