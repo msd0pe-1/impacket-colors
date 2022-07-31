@@ -280,9 +280,9 @@ def Colors(data,output):
                 line = line.replace(rights, Fore.BLUE + rights + Style.RESET_ALL)
                 line = line.replace(filename, Fore.BLUE + filename + Style.RESET_ALL)
 
-            if int(bytes.replace(',','')) <= 5000:
+            if int(bytes.replace(',','')) <= 2000000:
                 line =  re.sub("\d+,?\d*\s\s", Fore.GREEN + bytes + "  " + Style.RESET_ALL, line)
-            elif int(bytes.replace(',','')) <= 10000:
+            elif int(bytes.replace(',','')) <= 10000000:
                 line = line.replace(bytes, Fore.YELLOW + bytes + Style.RESET_ALL) 
             else:
                 line = line.replace(bytes, Fore.RED + bytes + Style.RESET_ALL)
