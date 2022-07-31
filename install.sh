@@ -1,18 +1,23 @@
-#/bin/bash
+#!/bin/bash
 
-echo "Adding the color plugin to IMPACKET : /usr/lib/python3/dist-packages/impacket/examples/colors.py"
-cp colors.py /usr/lib/python3/dist-packages/impacket/examples/colors.py
-
-echo "Adding the plugin to :"
-echo "[+] WMIEXEC : /usr/share/doc/python3-impacket/examples/wmiexec.py"
-sed '32 i from impacket.examples import colors' /usr/share/doc/python3-impacket/examples/wmiexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/wmiexec.py; rm -f /tmp/.i
-sed 's/print(self.__outputBuffer)/colors.Colors(data,self.__outputBuffer)/g' /usr/share/doc/python3-impacket/examples/wmiexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/wmiexec.py; rm -f /tmp/.i
-echo "[+] DCOMEXEC : /usr/share/doc/python3-impacket/examples/dcomexec.py"
-sed '53 i from impacket.examples import colors' /usr/share/doc/python3-impacket/examples/dcomexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/dcomexec.py; rm -f /tmp/.i
-sed 's/print(self.__outputBuffer)/colors.Colors(data,self.__outputBuffer)/g' /usr/share/doc/python3-impacket/examples/dcomexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/dcomexec.py; rm -f /tmp/.i
-echo "[+] ATEXEC : /usr/share/doc/python3-impacket/examples/atexec.py"
-sed '27 i from impacket.examples import colors' /usr/share/doc/python3-impacket/examples/atexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/atexec.py; rm -f /tmp/.i
-sed 's/print(data.decode(CODEC))/colors.Colors(self.__command,data)/g' /usr/share/doc/python3-impacket/examples/atexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/atexec.py; rm -f /tmp/.i
-echo "[+] SMBEXEC : /usr/share/doc/python3-impacket/examples/smbexec.py"
-sed '44 i from impacket.examples import colors' /usr/share/doc/python3-impacket/examples/smbexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/smbexec.py; rm -f /tmp/.i
-sed 's/print(self.__outputBuffer.decode(CODEC))/colors.Colors(data,self.__outputBuffer)/g' /usr/share/doc/python3-impacket/examples/smbexec.py > /tmp/.i; cat /tmp/.i > /usr/share/doc/python3-impacket/examples/smbexec.py; rm -f /tmp/.i
+echo "[*] Installing depency"
+pip3 install colorama
+path=$(find /usr/local/lib/python*/*/impacket/ -iname "logger.py" | sed 's/logger.py//g')
+echo
+echo "[*] Adding the color plugin to IMPACKET : "$path"colors.py"
+cp colors.py $path/colors.py
+echo
+echo "[*] Creating impacket-colors alias"
+cp impacket-colors /bin/
+chmod +x /bin/impacket-colors
+echo
+echo "[+] You can now run :"
+echo "	sudo impacket-colors on"
+echo "	sudo impacket-colors off"
+echo
+echo "[?] To take full advantage of the features of impacket-colors :"
+echo "	wget https://s3.amazonaws.com/rds.nsrl.nist.gov/RDS/current/RDS_modern.iso (~4Go)"
+echo "	unzip the iso"
+echo "	unzip NSRLFILE.zip"
+echo "	sudo mkdir /usr/share/nsrl; sudo cp NSRLFile.txt /usr/share/nsrl/"
+echo

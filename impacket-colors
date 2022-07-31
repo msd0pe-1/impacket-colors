@@ -1,0 +1,86 @@
+#!/bin/bash
+
+wmiexec=$(which wmiexec.py)
+dcomexec=$(which dcomexec.py)
+atexec=$(which atexec.py)
+smbexec=$(which smbexec.py)
+psexec=$(which psexec.py)
+smbclient=$(find /usr/local/lib/python*/*/impacket/ -iname "smbclient.py")
+
+if [ $1 = "on" ]; then
+	echo "Adding the plugin to :"
+	echo "[+] WMIEXEC : $wmiexec"
+	sed '32 i from impacket.examples import colors' $wmiexec > /tmp/.i; cat /tmp/.i > $wmiexec ; rm -f /tmp/.i
+	sed -z 's/print(self.__outputBuffer)/colors.Colors(data,self.__outputBuffer)/3' $wmiexec > /tmp/.i; cat /tmp/.i > $wmiexec ; rm -f /tmp/.i
+	echo "[+] DCOMEXEC : $dcomexec"
+	sed '53 i from impacket.examples import colors' $dcomexec > /tmp/.i; cat /tmp/.i > $dcomexec; rm -f /tmp/.i
+	sed -z 's/print(self.__outputBuffer)/colors.Colors(data,self.__outputBuffer)/3' $dcomexec > /tmp/.i; cat /tmp/.i > $dcomexec; rm -f /tmp/.i
+	echo "[+] ATEXEC : $atexec"
+	sed '27 i from impacket.examples import colors' $atexec > /tmp/.i; cat /tmp/.i > $atexec; rm -f /tmp/.i
+	sed 's/print(data.decode(CODEC))/colors.Colors(self.__command,data)/g' $atexec > /tmp/.i; cat /tmp/.i > $atexec; rm -f /tmp/.i
+	echo "[+] SMBEXEC : $smbexec"
+	sed '44 i from impacket.examples import colors' $smbexec > /tmp/.i; cat /tmp/.i > $smbexec; rm -f /tmp/.i
+	sed 's/print(self.__outputBuffer.decode(CODEC))/colors.Colors(data,self.__outputBuffer)/g' $smbexec > /tmp/.i; cat /tmp/.i > $smbexec; rm -f /tmp/.i
+    echo "[+] PSEXEC : $psexec"
+	sed '33 i from impacket.examples import colors' $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed '44 i LastCommands = []' $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+    sed "s/LastDataSent = data/LastDataSent = data\n            if LastDataSent != '\\\r\\\n':\n                LastCommands.append(LastDataSent.decode(CODEC).strip('\\\r\\\n'))/g" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	line_number=$(grep -Fn "sys.stdout.write(__stdoutData.decode(CODEC))" $psexec | awk '{print $1}' | tr -d ':' | head -n 1 | tr -d '\n')
+	cat  > /tmp/.a << \EOM
+                                if LastCommands != [] and LastCommands[-1] != '\r\n':
+                                    if 'tasklist' in LastCommands[-1] or 'netstat' in LastCommands[-1] or 'dir' in LastCommands[-1]:
+                                        colors.PsExec_Output.append(__stdoutData.decode(CODEC))
+                                        void = b""
+                                        __stdoutData = void
+                                        if colors.PsExec_Output[-1] == '\r\n' and len(colors.PsExec_Output) > 3:
+                                            del colors.PsExec_Output[-1]
+                                            colors.Colors(LastCommands[-1], ''.join(colors.PsExec_Output))
+                                            colors.PsExec_Output.clear()
+                                            LastCommands.clear()
+EOM
+	sed "$line_number e cat /tmp/.a" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.a
+    echo "[+] SMBCLIENT : $smbclient"
+	sed '29 i from impacket.examples import colors' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+    sed 's/pwd = ntpath.normpath(pwd)/pwd = ntpath.normpath(pwd)\n        colors_tocolor = ""/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+    sed 's/print(\"%crw-rw-rw- %10d  %s %s\" % (/colors_tocolor += \"%crw-rw-rw- %10d  %s %s\\n" % (/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+    sed 's/f.get_longname())).*$/f.get_longname())/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+    sed 's/self.completion.append((f.get_longname(), f.is_directory()))/self.completion.append((f.get_longname(), f.is_directory()))\n        if colors_tocolor != "":\n            colors.Colors("smbclient_ls", colors_tocolor)/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+fi  
+
+if [ $1 = "off" ]; then
+	echo "Removing the plugin from :"
+	echo "[+] WMIEXEC : $wmiexec"
+	cat $wmiexec | grep -v 'from impacket.examples import colors' > /tmp/.i; cat /tmp/.i > $wmiexec; rm -f /tmp/.i
+	sed 's/colors.Colors(data,self.__outputBuffer)/print(self.__outputBuffer)/g' $wmiexec > /tmp/.i; cat /tmp/.i > $wmiexec; rm -f /tmp/.i
+	echo "[+] DCOMEXEC : $dcomexec"
+	cat $dcomexec | grep -v 'from impacket.examples import colors'  > /tmp/.i; cat /tmp/.i > $dcomexec; rm -f /tmp/.i
+	sed 's/colors.Colors(data,self.__outputBuffer)/print(self.__outputBuffer)/g' $dcomexec > /tmp/.i; cat /tmp/.i > $dcomexec; rm -f /tmp/.i
+	echo "[+] ATEXEC : $atexec"
+	cat $atexec | grep -v 'from impacket.examples import colors'  > /tmp/.i; cat /tmp/.i > $atexec; rm -f /tmp/.i
+	sed 's/colors.Colors(self.__command,data)/print(data.decode(CODEC))/g' $atexec > /tmp/.i; cat /tmp/.i > $atexec; rm -f /tmp/.i
+	echo "[+] SMBEXEC : $smbexec"
+	cat $smbexec | grep -v 'from impacket.examples import colors'  > /tmp/.i; cat /tmp/.i > $smbexec; rm -f /tmp/.i
+	sed 's/colors.Colors(data,self.__outputBuffer)/print(self.__outputBuffer.decode(CODEC))/g' $smbexec > /tmp/.i; cat /tmp/.i > $smbexec; rm -f /tmp/.i
+    echo "[+] SMBCLIENT : $smbclient"
+	echo "[+] PSEXEC : $psexec"
+	cat $psexec | grep -v 'from impacket.examples import colors' > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed '/LastCommands = \[\]/d' $psexec  > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/if LastCommands != \[\] and LastCommands\[-1\]/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/if 'tasklist' in LastCommands\[-1\] or 'netstat' in LastCommands\[-1\] or 'dir' in LastCommands\[-1\]:/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/colors.PsExec_Output.append(__stdoutData.decode(CODEC))/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed '/void = b""/d' $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/__stdoutData = void/d" $psexec  > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/if colors.PsExec_Output\[-1\]/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+    sed "/del colors.PsExec_Output\[-1\]/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/colors.Colors(LastCommands\[-1\], ''.join(colors.PsExec_Output))/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/colors.PsExec_Output.clear()/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/LastCommands.clear()/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/if LastDataSent != '\\\r\\\n':/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	sed "/LastCommands.append(LastDataSent.decode(CODEC).strip('\\\r\\\n'))/d" $psexec > /tmp/.i; cat /tmp/.i > $psexec; rm -f /tmp/.i
+	cat $smbclient | grep -v 'from impacket.examples import colors'  > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+	sed '/colors_tocolor = ""/d' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+    sed 's/colors_tocolor += \"%crw-rw-rw- %10d  %s %s\\n" % (/print(\"%crw-rw-rw- %10d  %s %s\" % (/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+    sed 's/f.get_longname())/f.get_longname()))/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+    sed '/if colors_tocolor != "":/d' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+	sed '/colors.Colors("smbclient_ls", colors_tocolor)/d' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
+fi  
