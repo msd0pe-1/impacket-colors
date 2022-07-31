@@ -28,7 +28,7 @@ It can use the NSRL database of Nist to know if the files encountered are native
 
 <h2>SMBCLIENT</h2>
 <p align="center">
-  <img width="70% height="70%" src="https://user-images.githubusercontent.com/47142249/182037183-1b2a47eb-c246-420d-9ba8-b6586e293300.png">
+  <img width="70% height="70%" src="https://user-images.githubusercontent.com/47142249/182038968-83bf8b74-0725-40fa-b045-f8afb79c2a16.png">
 </p>
 
 <h2>INSTALLATION</h2>
