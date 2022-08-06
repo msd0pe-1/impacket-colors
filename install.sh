@@ -1,10 +1,13 @@
 #!/bin/bash
 
 echo "[*] Installing depency"
+apt remove python3-impacket
+apt install python3-pip
+pip3 install impacket
 pip3 install colorama
 path=$(find /usr/local/lib/python*/*/impacket/ -iname "logger.py" | sed 's/logger.py//g')
 echo
-echo "[*] Adding the color plugin to IMPACKET : "$path"colors.py"
+echo "[*] Adding the color plugin to IMPACKET : "$path".colors.py"
 cp colors.py $path/colors.py
 echo
 echo "[*] Creating impacket-colors alias"
