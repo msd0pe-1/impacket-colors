@@ -114,10 +114,12 @@ def Colors(data,output):
         for line in output:
             try:
                 if output.index(line) not in no_color_index:
-                    line_date = re.findall("((^.*)  \d+:\d+)", line)
+                    line_date = re.findall("((^.*)  \d+:\d+( AM| PM|\s+))", line)
                     line_date = line_date[0]
                     if line_date != '':
-                        datem = datetime.strptime(line_date[1], "%d/%m/%Y")
+                        datem = datetime.strptime(line_date[1], "%m/%d/%Y")
+                        if datem == '':
+                            datem = datetime.strptime(line_date[1], "%d/%m/%Y")
                         if datem.year == current_year:
                             line = line.replace(line_date[0], Fore.GREEN + line_date[0] + Style.RESET_ALL)
                         elif datem.year == current_year - 1:
@@ -139,7 +141,7 @@ def Colors(data,output):
                             line = line.replace(file_bytes, Fore.YELLOW + file_bytes + Style.RESET_ALL) 
                         else:
                             line = line.replace(file_bytes, Fore.RED + file_bytes + Style.RESET_ALL)
-
+                        print(line)
                         if nsrlfiles != []:
                             if file_name in nsrlfiles or file_name + ".mui" in nsrlfiles:
                                 line = line.replace(file_name, Fore.WHITE + file_name + Style.RESET_ALL)
