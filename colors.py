@@ -141,7 +141,6 @@ def Colors(data,output):
                             line = line.replace(file_bytes, Fore.YELLOW + file_bytes + Style.RESET_ALL) 
                         else:
                             line = line.replace(file_bytes, Fore.RED + file_bytes + Style.RESET_ALL)
-                        print(line)
                         if nsrlfiles != []:
                             if file_name in nsrlfiles or file_name + ".mui" in nsrlfiles:
                                 line = line.replace(file_name, Fore.WHITE + file_name + Style.RESET_ALL)
