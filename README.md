@@ -34,7 +34,7 @@ It can use the NSRL database of Nist to know if the files encountered are native
 <h2>INSTALLATION</h2>
 Download the project:
 <code>https://github.com/msd0pe-1/impacket-colors</code><br />
-You only need to execute install.sh to get the libraries useful to the program : <code>sudo sh install.sh</code><br /><br />
+You only need to execute install.sh to get the libraries useful to the program : <code>sh install.sh</code><br /><br />
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/47142249/182033736-ab888f1e-a4b4-4f20-bb81-61e44bd60b88.png">
@@ -43,8 +43,8 @@ You only need to execute install.sh to get the libraries useful to the program :
 <h2>USAGE</h2>
 <pre>
     <code>
-sudo impacket-colors on
-sudo impacket-colors off
+impacket-colors on
+impacket-colors off
     </code>
 </pre>
 

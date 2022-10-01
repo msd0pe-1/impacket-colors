@@ -1,11 +1,11 @@
 #!/bin/bash
 
-wmiexec=$(which wmiexec.py)
-dcomexec=$(which dcomexec.py)
-atexec=$(which atexec.py)
-smbexec=$(which smbexec.py)
-psexec=$(which psexec.py)
-smbclient=$(find /usr/local/lib/python*/*/impacket/ -iname "smbclient.py")
+wmiexec="/home/$USER/.local/bin/wmiexec.py"
+dcomexec="/home/$USER/.local/bin/dcomexec.py"
+atexec="/home/$USER/.local/bin/atexec.py"
+smbexec="/home/$USER/.local/bin/smbexec.py"
+psexec="/home/$USER/.local/bin/psexec.py"
+smbclient="/home/$USER/.local/bin/smbclient.py"
 
 if [ $1 = "on" ]; then
 	echo "Adding the plugin to :"
@@ -45,7 +45,7 @@ EOM
     sed 's/print(\"%crw-rw-rw- %10d  %s %s\" % (/colors_tocolor += \"%crw-rw-rw- %10d  %s %s\\n" % (/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
     sed 's/f.get_longname())).*$/f.get_longname())/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
     sed 's/self.completion.append((f.get_longname(), f.is_directory()))/self.completion.append((f.get_longname(), f.is_directory()))\n        if colors_tocolor != "":\n            colors.Colors("smbclient_ls", colors_tocolor)/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
-fi  
+fi
 
 if [ $1 = "off" ]; then
 	echo "Removing the plugin from :"
@@ -83,4 +83,4 @@ if [ $1 = "off" ]; then
     sed 's/f.get_longname())/f.get_longname()))/g' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
     sed '/if colors_tocolor != "":/d' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
 	sed '/colors.Colors("smbclient_ls", colors_tocolor)/d' $smbclient > /tmp/.i; cat /tmp/.i > $smbclient; rm -f /tmp/.i
-fi  
+fi
